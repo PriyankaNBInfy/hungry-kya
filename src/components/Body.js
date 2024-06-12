@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import resObj from "../utils/mockData";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
-import { API_URL } from "../utils/constants";
+import { CARDS_API } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);
@@ -21,7 +22,7 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(API_URL);
+    const data = await fetch(CARDS_API);
 
     const jsonData = await data.json();
     setRestaurantList(
@@ -41,7 +42,7 @@ const Body = () => {
     setFilteredList(filteredRestaurants);
   };
 
-  return restaurantList.length === 0 ? (
+  return filteredList?.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -62,9 +63,11 @@ const Body = () => {
           </button>
         </div>
         <div className="res-container">
-          {filteredList.length === 0 && <div>No Restaurants Found</div>}
-          {filteredList.map((res) => (
-            <RestaurantCard resData={res} key={res?.info?.id} />
+          {filteredList?.length === 0 && <div>No Restaurants Found</div>}
+          {filteredList?.map((res) => (
+            <Link key={res?.info?.id} to={"/restaurant/" + res?.info?.id}>
+              <RestaurantCard resData={res} />
+            </Link>
           ))}
         </div>
       </div>
