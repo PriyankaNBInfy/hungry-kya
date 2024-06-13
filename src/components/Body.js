@@ -48,7 +48,7 @@ const Body = () => {
     <div className="body">
       <div>
         <div className="filter">
-          <div>
+          <div className="search">
             <input
               type="text"
               value={searchText}
@@ -58,9 +58,11 @@ const Body = () => {
             />
             <button onClick={searchRestaurants}>Search</button>
           </div>
-          <button onClick={getTopRatedRestaurants}>
-            Top Rated Restaurants
-          </button>
+          <div className="search">
+            <button onClick={getTopRatedRestaurants}>
+              Top Rated Restaurants
+            </button>
+          </div>
         </div>
         <div className="res-container">
           {filteredList?.length === 0 && <div>No Restaurants Found</div>}

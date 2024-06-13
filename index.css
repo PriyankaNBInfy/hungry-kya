@@ -67,3 +67,12 @@
 .filter {
     display: flex;
 }
+
+.user-card {
+    padding: 10px;
+    border: 1px solid blueviolet;
+}
+
+.search {
+    margin: 10px;
+}
