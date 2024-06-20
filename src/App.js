@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -9,6 +9,10 @@ import RouteError from "./components/RouteError";
 import RestaurantDetail from "./components/RestaurantDetail";
 import useOnlineStatus from "./utils/useOnlineStatus";
 import Offline from "./components/Offline";
+import { ThemeContext } from "./utils/ThemeContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./components/Cart";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -16,17 +20,22 @@ const Grocery = lazy(() => import("./components/Grocery"));
 
 const AppLayout = () => {
   const onlineStatus = useOnlineStatus();
+  const [theme, setTheme] = useState("light");
   return (
-    <div>
-      {onlineStatus ? (
-        <>
-          <Header />
-          <Outlet />
-        </>
-      ) : (
-        <Offline />
-      )}
-    </div>
+    <Provider store={appStore}>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <div className={`${theme === "dark" ? "bg-slate-800" : "bg-white"}`}>
+          {onlineStatus ? (
+            <>
+              <Header />
+              <Outlet />
+            </>
+          ) : (
+            <Offline />
+          )}
+        </div>
+      </ThemeContext.Provider>
+    </Provider>
   );
 };
 
@@ -58,6 +67,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/restaurant/:id",
         element: <RestaurantDetail />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
     errorElement: <RouteError />,
